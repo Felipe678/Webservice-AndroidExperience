@@ -32,13 +32,8 @@ public class AlunoService {
 		alunoRepository.delete(buscaRa);
 		return "Deleted Aluno with RA: "+ra;
 	}
-	public Aluno editarAluno(int ra,Aluno aluno) {
-		Aluno buscaRa = alunoRepository.findByRa(ra);
-		Aluno response = new Aluno();
-		if(buscaRa != null) {
-			response = alunoRepository.save(aluno);
-		}
-		return response;
+	public String deletarTodosAlunos() {
+		alunoRepository.deleteAll();
+		return "Deleted all registers";
 	}
-	
 }
