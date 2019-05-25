@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.Aluno;
+import com.example.demo.repository.AlunoRepository;
 import com.example.demo.service.AlunoService;
 
 @RestController
@@ -21,7 +24,11 @@ import com.example.demo.service.AlunoService;
 public class AlunoController {
 
 	@Autowired
+	private AlunoRepository alunoRepository;
+	
+	@Autowired
 	private AlunoService alunoService;
+	
 	@GetMapping("/{ra}")
 	public Aluno getByRa(@PathVariable("ra") int ra) {
 		return alunoService.buscarAlunoPeloRra(ra);
@@ -39,6 +46,17 @@ public class AlunoController {
 		Aluno response = alunoService.save(aluno);
 		return response;
 	}
+	
+	@RequestMapping(value = "/cadastrarAluno", method = RequestMethod.POST)
+    public String form(@Valid Aluno aluno, BindingResult result, RedirectAttributes attributes) {
+        if (result.hasErrors()) {
+            attributes.addFlashAttribute("mensagem", "Verifique os campos!");
+            return "ERROR";
+        }
+        alunoRepository.save(aluno);
+        attributes.addFlashAttribute("mensagem", "Aluno Cadastrado com sucesso!");
+        return "redirect:/getAll";
+    }
 	
 	@DeleteMapping(value = "/{ra}")
 	public void delete(@PathVariable int ra) {
