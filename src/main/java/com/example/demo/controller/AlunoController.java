@@ -41,22 +41,12 @@ public class AlunoController {
 		return response;
 	}
 	
-	@PostMapping({"/Create"})
+	@PostMapping({"/cadastrarAluno"})
 	public Aluno create(@RequestBody Aluno aluno,BindingResult bindingResult) {
 		Aluno response = alunoService.save(aluno);
 		return response;
 	}
 	
-	@RequestMapping(value = "/cadastrarAluno", method = RequestMethod.POST)
-    public String form(@Valid Aluno aluno, BindingResult result, RedirectAttributes attributes) {
-        if (result.hasErrors()) {
-            attributes.addFlashAttribute("mensagem", "Verifique os campos!");
-            return "ERROR";
-        }
-        alunoRepository.save(aluno);
-        attributes.addFlashAttribute("mensagem", "Aluno Cadastrado com sucesso!");
-        return "redirect:/getAll";
-    }
 	
 	@DeleteMapping(value = "/{ra}")
 	public void delete(@PathVariable int ra) {
